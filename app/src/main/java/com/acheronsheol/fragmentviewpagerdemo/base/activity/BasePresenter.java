@@ -1,16 +1,20 @@
 package com.acheronsheol.fragmentviewpagerdemo.base.activity;
 
-import java.util.ArrayList;
+public class BasePresenter<V extends IBaseView> implements IBasePresenter {
 
-public class BasePresenter implements BasePresenterInterface {
+    protected V mView;
 
-    private BaseViewInterface baseView;
-    private BaseModelInterface baseModel;
-
-    public BasePresenter(BaseViewInterface baseView){//activity的view实例
-        this.baseView = baseView;
-        this.baseModel = new BaseModel(this);
+    @Override
+    public void bindPresenter(IBaseView view) {
+        mView = (V) view;
     }
+
+    @Override
+    public void unBindPresenter() {
+        mView = null;
+    }
+
+
 
     /*
      * 用户要进行的事件

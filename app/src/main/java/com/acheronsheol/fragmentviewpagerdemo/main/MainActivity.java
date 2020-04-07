@@ -1,23 +1,24 @@
-package com.acheronsheol.fragmentviewpagerdemo;
+package com.acheronsheol.fragmentviewpagerdemo.main;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.Nullable;
 import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.acheronsheol.fragmentviewpagerdemo.R;
 import com.acheronsheol.fragmentviewpagerdemo.base.activity.BaseActivity;
 import com.acheronsheol.fragmentviewpagerdemo.base.activity.BasePresenter;
-import com.acheronsheol.fragmentviewpagerdemo.base.activity.BaseViewInterface;
+import com.acheronsheol.fragmentviewpagerdemo.base.activity.IBasePresenter;
+import com.acheronsheol.fragmentviewpagerdemo.base.activity.IBaseView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends BaseActivity implements BaseViewInterface {
-
-    BasePresenter basePresenter;
+public class MainActivity extends BaseActivity implements MainContract.IMainView {
 
     @BindView(R.id.vp_tab_body)
     ViewPager vp_tab_body;
@@ -37,11 +38,31 @@ public class MainActivity extends BaseActivity implements BaseViewInterface {
 
     List<RadioButton> radioButtonList;
 
+
+
+    @Override
+    protected void initLayout() {
+        setContentView(R.layout.activity_main);
+    }
+
+    @Override
+    protected void initViews() {
+
+    }
+
+    @Override
+    protected void initData() {
+
+    }
+
+    @Override
+    protected MainContract.IMainPresenter setPresenter() {
+        return new MainPresenter(this);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        basePresenter = new BasePresenter(this);
 
         radioButtonList = new ArrayList<RadioButton>(){
             {

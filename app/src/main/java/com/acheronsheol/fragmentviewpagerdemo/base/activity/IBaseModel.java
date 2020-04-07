@@ -1,6 +1,6 @@
 package com.acheronsheol.fragmentviewpagerdemo.base.activity;
 
-public interface BaseModelInterface {
+public interface IBaseModel {
 
     void doBusinessEvent(int i);
 

@@ -1,6 +1,10 @@
 package com.acheronsheol.fragmentviewpagerdemo.base.activity;
 
-public interface BaseViewInterface {
+import android.content.Context;
+
+public interface IBaseView {
+
+    Context getContext();
 
     void onShortToast(String msg);
 

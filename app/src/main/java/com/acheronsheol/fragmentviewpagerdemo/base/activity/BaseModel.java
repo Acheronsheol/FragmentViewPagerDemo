@@ -1,14 +1,6 @@
 package com.acheronsheol.fragmentviewpagerdemo.base.activity;
 
-import java.util.ArrayList;
-
-public class BaseModel implements BaseModelInterface {
-
-    private BasePresenterInterface basePresenter;
-
-    public BaseModel(BasePresenterInterface basePresenter){
-        this.basePresenter = basePresenter;
-    }
+public class BaseModel implements IBaseModel {
 
     /*
      * 来自Socket长连接的任务
