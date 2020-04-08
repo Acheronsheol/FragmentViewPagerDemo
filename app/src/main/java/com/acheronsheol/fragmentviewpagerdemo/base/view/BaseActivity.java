@@ -1,4 +1,4 @@
-package com.acheronsheol.fragmentviewpagerdemo.base.activity;
+package com.acheronsheol.fragmentviewpagerdemo.base.view;
 
 import android.content.Context;
 import android.os.Build;
@@ -11,24 +11,17 @@ import androidx.annotation.IdRes;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.acheronsheol.fragmentviewpagerdemo.base.inject.InjectPresenter;
+import com.acheronsheol.fragmentviewpagerdemo.base.proxy.ProxyActivity;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
-
-import butterknife.ButterKnife;
 
 
 public abstract class BaseActivity extends AppCompatActivity implements IBaseView {
 
     private static Toast shortToast;
+
     private static Toast longToast;
 
-    /**
-     * 保存使用注解的 Presenter ，用于解绑
-     */
-    private List<BasePresenter> mInjectPresenters;
+    private ProxyActivity mProxyActivity;
 
     protected abstract void initLayout();
 
@@ -36,58 +29,39 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseVie
 
     protected abstract void initData();
 
+
+    @SuppressWarnings("SameParameterValue")
     protected <T extends View> T $(@IdRes int viewId) {
         return findViewById(viewId);
     }
 
+    @SuppressWarnings({"unchecked", "TryWithIdenticalCatches"})
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ButterKnife.bind(this);
+
         initLayout();
 
-        mInjectPresenters = new ArrayList<>();
-
-        //获得已经申明的变量，包括私有的
-        Field[] fields = this.getClass().getDeclaredFields();
-        for (Field field : fields) {
-            //获取变量上面的注解类型
-            InjectPresenter injectPresenter = field.getAnnotation(InjectPresenter.class);
-            if (injectPresenter != null) {
-                try {
-                    Class<? extends BasePresenter> type = (Class<? extends BasePresenter>) field.getType();
-                    BasePresenter mInjectPresenter = type.newInstance();
-                    mInjectPresenter.bindPresenter(this);
-                    field.setAccessible(true);
-                    field.set(this, mInjectPresenter);
-                    mInjectPresenters.add(mInjectPresenter);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (InstantiationException e) {
-                    e.printStackTrace();
-                }catch (ClassCastException e){
-                    e.printStackTrace();
-                    throw new RuntimeException("SubClass must extends Class:BasePresenter");
-                }
-            }
-        }
+        mProxyActivity = createProxyActivity();
+        mProxyActivity.bindPresenter();
 
         initViews();
         initData();
     }
 
-    protected void onDestroy() {
-        super.onDestroy();
-        /**
-         * 解绑，避免内存泄漏
-         */
-        for (BasePresenter presenter : mInjectPresenters) {
-            presenter.unBindPresenter();
+    @SuppressWarnings("unchecked")
+    private ProxyActivity createProxyActivity() {
+        if (mProxyActivity == null) {
+            return new ProxyActivity(this);
         }
-        mInjectPresenters.clear();
-        mInjectPresenters = null;
+        return mProxyActivity;
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mProxyActivity.unbindPresenter();
+    }
 
     @Override
     public Context getContext() {
