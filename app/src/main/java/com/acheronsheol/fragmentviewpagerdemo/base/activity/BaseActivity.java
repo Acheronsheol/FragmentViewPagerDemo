@@ -10,23 +10,31 @@ import android.widget.Toast;
 import androidx.annotation.IdRes;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.acheronsheol.fragmentviewpagerdemo.base.inject.InjectPresenter;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.ButterKnife;
 
 
-public abstract class BaseActivity<P extends IBasePresenter> extends AppCompatActivity implements IBaseView {
+public abstract class BaseActivity extends AppCompatActivity implements IBaseView {
 
     private static Toast shortToast;
     private static Toast longToast;
 
-    protected P mPresenter;
+    /**
+     * 保存使用注解的 Presenter ，用于解绑
+     */
+    private List<BasePresenter> mInjectPresenters;
 
     protected abstract void initLayout();
 
     protected abstract void initViews();
 
     protected abstract void initData();
-
-    protected abstract P setPresenter();
 
     protected <T extends View> T $(@IdRes int viewId) {
         return findViewById(viewId);
@@ -38,11 +46,31 @@ public abstract class BaseActivity<P extends IBasePresenter> extends AppCompatAc
         ButterKnife.bind(this);
         initLayout();
 
-        /**
-         * 实例化和绑定 P 层
-         */
-        mPresenter = setPresenter();
-        mPresenter.bindPresenter(this);
+        mInjectPresenters = new ArrayList<>();
+
+        //获得已经申明的变量，包括私有的
+        Field[] fields = this.getClass().getDeclaredFields();
+        for (Field field : fields) {
+            //获取变量上面的注解类型
+            InjectPresenter injectPresenter = field.getAnnotation(InjectPresenter.class);
+            if (injectPresenter != null) {
+                try {
+                    Class<? extends BasePresenter> type = (Class<? extends BasePresenter>) field.getType();
+                    BasePresenter mInjectPresenter = type.newInstance();
+                    mInjectPresenter.bindPresenter(this);
+                    field.setAccessible(true);
+                    field.set(this, mInjectPresenter);
+                    mInjectPresenters.add(mInjectPresenter);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                }catch (ClassCastException e){
+                    e.printStackTrace();
+                    throw new RuntimeException("SubClass must extends Class:BasePresenter");
+                }
+            }
+        }
 
         initViews();
         initData();
@@ -53,8 +81,11 @@ public abstract class BaseActivity<P extends IBasePresenter> extends AppCompatAc
         /**
          * 解绑，避免内存泄漏
          */
-        mPresenter.unBindPresenter();
-        mPresenter = null;
+        for (BasePresenter presenter : mInjectPresenters) {
+            presenter.unBindPresenter();
+        }
+        mInjectPresenters.clear();
+        mInjectPresenters = null;
     }
 
 

@@ -3,7 +3,7 @@ package com.acheronsheol.fragmentviewpagerdemo.main;
 import com.acheronsheol.fragmentviewpagerdemo.base.activity.BasePresenter;
 import com.acheronsheol.fragmentviewpagerdemo.base.activity.IBaseView;
 
-public class MainPresenter extends BasePresenter<MainContract.IMainView> implements MainContract.IMainPresenter {
+public class MainPresenter extends BasePresenter<MainContract.IMainView,DataModel> implements MainContract.IMainPresenter {
 
     private MainContract.IMainModel mModel;
     private MainContract.IMainView mView;

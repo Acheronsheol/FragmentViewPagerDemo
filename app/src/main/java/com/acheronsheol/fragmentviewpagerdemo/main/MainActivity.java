@@ -14,6 +14,7 @@ import com.acheronsheol.fragmentviewpagerdemo.base.activity.BaseActivity;
 import com.acheronsheol.fragmentviewpagerdemo.base.activity.BasePresenter;
 import com.acheronsheol.fragmentviewpagerdemo.base.activity.IBasePresenter;
 import com.acheronsheol.fragmentviewpagerdemo.base.activity.IBaseView;
+import com.acheronsheol.fragmentviewpagerdemo.base.inject.InjectPresenter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +39,8 @@ public class MainActivity extends BaseActivity implements MainContract.IMainView
 
     List<RadioButton> radioButtonList;
 
-
+    @InjectPresenter
+    private MainPresenter mPresenter;
 
     @Override
     protected void initLayout() {
@@ -53,11 +55,6 @@ public class MainActivity extends BaseActivity implements MainContract.IMainView
     @Override
     protected void initData() {
 
-    }
-
-    @Override
-    protected MainContract.IMainPresenter setPresenter() {
-        return new MainPresenter(this);
     }
 
     @Override

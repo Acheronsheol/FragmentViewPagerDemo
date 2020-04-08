@@ -1,6 +1,8 @@
 package com.acheronsheol.fragmentviewpagerdemo.main;
 
-public class DataModel implements MainContract.IMainModel {
+import com.acheronsheol.fragmentviewpagerdemo.base.activity.BaseModel;
+
+public class DataModel extends BaseModel implements MainContract.IMainModel {
 
     @Override
     public void doBusinessEvent(int i) {
