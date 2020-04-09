@@ -6,10 +6,10 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import com.acheronsheol.fragmentviewpagerdemo.R;
-import com.acheronsheol.fragmentviewpagerdemo.base.view.BaseFragment;
 import com.acheronsheol.fragmentviewpagerdemo.base.inject.InjectPresenter;
+import com.acheronsheol.fragmentviewpagerdemo.base.view.BaseFragment;
 
-public class TestFragment extends BaseFragment implements TestContract.ITestView {
+public class Test2Fragment extends BaseFragment implements TestContract.ITestView {
 
     @InjectPresenter
     private TestPresenter mPresenter;
@@ -28,7 +28,7 @@ public class TestFragment extends BaseFragment implements TestContract.ITestView
 
     @Override
     protected void initData() {
-        tv_test.setText("啊啊啊啊");
+        tv_test.setText("第二页");
     }
 
     @Override

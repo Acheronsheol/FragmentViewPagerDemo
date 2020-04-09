@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/vp_tab_body"
+    <FrameLayout
+        android:id="@+id/fl_tab_body"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/rg_tab_hub"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:orientation="horizontal"/>
 
     <RadioGroup
         android:id="@+id/rg_tab_hub"
         android:layout_width="match_parent"
         android:layout_height="@dimen/sw_100dp"
-        android:orientation="horizontal"
-        android:layout_alignParentBottom="true">
+        android:orientation="horizontal">
 
         <RadioButton
             android:id="@+id/rb_1"
@@ -55,4 +54,4 @@
 
     </RadioGroup>
 
-</RelativeLayout>
+</LinearLayout>
