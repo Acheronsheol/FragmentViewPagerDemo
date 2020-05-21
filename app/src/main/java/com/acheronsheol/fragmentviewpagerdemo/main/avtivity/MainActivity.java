@@ -17,6 +17,7 @@ import com.acheronsheol.fragmentviewpagerdemo.main.fragment.Test2Fragment;
 import com.acheronsheol.fragmentviewpagerdemo.main.fragment.Test3Fragment;
 import com.acheronsheol.fragmentviewpagerdemo.main.fragment.Test4Fragment;
 import com.acheronsheol.fragmentviewpagerdemo.main.fragment.Test5Fragment;
+import com.gyf.immersionbar.ImmersionBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,6 +80,7 @@ public class MainActivity extends BaseActivity implements MainContract.IMainView
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ImmersionBar.with(this).statusBarDarkFont(true).init();
     }
 
     @Override
